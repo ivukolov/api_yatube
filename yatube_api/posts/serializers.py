@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Post, Comment, Group
 
 
@@ -18,7 +19,9 @@ class PostSerializer(serializers.ModelSerializer):
         required=False,
         allow_null=True
     )
-    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    author = (serializers.SlugRelatedField
+              (slug_field='username', read_only=True)
+              )
 
     class Meta:
         model = Post

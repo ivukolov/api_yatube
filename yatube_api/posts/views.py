@@ -33,13 +33,20 @@ class PostViewSet(viewsets.ModelViewSet):
             if serializer.is_valid():
                 post = get_object_or_404(Post, pk=pk)
                 serializer.save(author=self.request.user, post=post)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    serializer.data, status=status.HTTP_201_CREATED
+                )
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
         comment = Comment.objects.filter(post=pk).all()
         serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['get', 'put', 'patch', 'delete'], url_path='comments/(?P<comment_pk>[^/.]+)')
+    @action(detail=True,
+            methods=['get', 'put', 'patch', 'delete'],
+            url_path='comments/(?P<comment_pk>[^/.]+)'
+            )
     def comment_detail(self, request, pk=None, comment_pk=None):
         comment = get_object_or_404(Comment, post=pk, pk=comment_pk)
 
