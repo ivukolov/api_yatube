@@ -22,7 +22,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         if instance.author != self.request.user:
-            raise PermissionDenied('Изменение чужого контента запрещено!')
+            raise PermissionDenied('Удаление чужого контента запрещено!')
         super().perform_update(instance)
 
     @action(detail=True, methods=['get', 'post'], url_path='comments')
@@ -53,7 +53,7 @@ class PostViewSet(viewsets.ModelViewSet):
             serializer = CommentSerializer(
                 comment,
                 data=request.data,
-                partial=request.method == 'PATCH'
+                partial=True
             )
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -75,18 +75,3 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         raise MethodNotAllowed('DELETE')
-
-
-
-# class CommentViewSet(viewsets.ModelViewSet):
-#     serializer_class = CommentSerializer
-#
-#
-#
-#     def get_queryset(self):
-#         post_id = self.kwargs['post_id']
-#         return Comment.objects.filter(post_id=post_id)
-#
-#     def perform_create(self, serializer):
-#         post_id = self.kwargs['post_id']
-#         serializer.save(author=self.request.user, post_id=post_id)

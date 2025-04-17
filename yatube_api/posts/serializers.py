@@ -15,7 +15,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    # comments = CommentSerializer(many=True, required=False, read_only=True)
     group = serializers.SlugRelatedField(slug_field='id',
             queryset=Group.objects.all(), required=False, allow_null=True)
     author = serializers.SlugRelatedField(slug_field='username', read_only=True)
