@@ -1,6 +1,6 @@
 from rest_framework.decorators import action
-from rest_framework.decorators import action
 from rest_framework import viewsets, status
+from rest_framework.exceptions import PermissionDenied, MethodNotAllowed
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
@@ -14,6 +14,16 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.instance.author != self.request.user:
+            raise PermissionDenied('Изменение чужого контента запрещено!')
+        super().perform_update(serializer)
+
+    def perform_destroy(self, instance):
+        if instance.author != self.request.user:
+            raise PermissionDenied('Изменение чужого контента запрещено!')
+        super().perform_update(instance)
 
     @action(detail=True, methods=['get', 'post'], url_path='comments')
     def comments_list(self, request, pk=None):
@@ -38,6 +48,8 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         elif request.method in ['PUT', 'PATCH']:
+            if request.user != comment.author:
+                raise PermissionDenied('Изменение чужого контента запрещено!')
             serializer = CommentSerializer(
                 comment,
                 data=request.data,
@@ -48,6 +60,8 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         elif request.method == 'DELETE':
+            if request.user != comment.author:
+                raise PermissionDenied('Изменение чужого контента запрещено!')
             comment.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -55,6 +69,13 @@ class PostViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+    def update(self, request, *args, **kwargs):
+        raise MethodNotAllowed('PATCH')
+
+    def destroy(self, request, *args, **kwargs):
+        raise MethodNotAllowed('DELETE')
+
 
 
 # class CommentViewSet(viewsets.ModelViewSet):
