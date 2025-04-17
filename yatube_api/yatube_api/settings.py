@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Мои приложения
     'posts.apps.PostsConfig',
+    'api.apps.ApiConfig',
     # Доп модули
     'rest_framework',
     'rest_framework.authtoken',

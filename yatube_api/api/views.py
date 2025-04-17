@@ -4,8 +4,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-from .models import Post, Comment, Group
-from .serializers import PostSerializer, GroupSerializer, CommentSerializer
+from posts.models import Post, Comment, Group
+from api.serializers import PostSerializer, GroupSerializer, CommentSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
