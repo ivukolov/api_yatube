@@ -26,7 +26,6 @@ class PostViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
-
     @action(detail=True, methods=['get', 'post'], url_path='comments')
     def comments_list(self, request, pk=None):
         if request.method == 'POST':
