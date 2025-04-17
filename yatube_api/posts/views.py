@@ -23,7 +23,9 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         if instance.author != self.request.user:
             raise PermissionDenied('Удаление чужого контента запрещено!')
-        super().perform_update(instance)
+        super().perform_destroy(instance)
+
+
 
     @action(detail=True, methods=['get', 'post'], url_path='comments')
     def comments_list(self, request, pk=None):
