@@ -74,11 +74,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'head']
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-
-    def update(self, request, *args, **kwargs):
-        raise MethodNotAllowed('PATCH')
-
-    def destroy(self, request, *args, **kwargs):
-        raise MethodNotAllowed('DELETE')
