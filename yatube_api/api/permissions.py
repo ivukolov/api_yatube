@@ -2,8 +2,8 @@ from rest_framework import permissions
 from rest_framework.permissions import BasePermission
 
 
-class OnlyAuthorUpdate(BasePermission):
-    """Кастомный permission запрещает доступ не авторизированным
+class IsAuthorOrReadOnly(BasePermission):
+    """Кастомный permission запрещает доступ неавторизированным
     пользователям и проверяет авторство объекта."""
 
     def has_permission(self, request, view):
